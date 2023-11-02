@@ -1,6 +1,11 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { ThemeProvider } from "@/components/theme-provider"
 import './globals.css'
+import { cn } from '@/lib/utils'
+import { ModeToggle } from '@/components/toggle-theme'
+import { Toaster } from 'sonner'
+import ReactQueryProvider from '@/components/react-query-provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,8 +20,25 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en-US" suppressHydrationWarning >
+
+      <body className={cn("w-screen h-screen flex flex-col", inter.className)}>
+        <ReactQueryProvider>
+          <Toaster theme="dark" />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+          >
+            <div className='bg-card h-12 border-b-2 flex flex-row justify-end items-center px-4'>
+              <ModeToggle />
+            </div>
+            <div className='grow'>
+              {children}
+            </div>
+          </ThemeProvider>
+        </ReactQueryProvider>
+      </body>
     </html>
   )
 }
