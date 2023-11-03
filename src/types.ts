@@ -13,7 +13,7 @@ export interface BHCExtractorData {
   "Pack": string,
   "SKU": string,
   "MFG Style": string,
-  "Pack Qty": string,
+  "Pack Qty": number,
   "Description": string,
   "UPC": string,
   "Cost/Unit": number,
@@ -21,4 +21,15 @@ export interface BHCExtractorData {
   "PO": number,
   "Cancel Date": string,
   "Mark For": string,
+}
+
+
+export interface OTPExtractor {
+  "Item": string,
+  "OTP Item": string,
+  "Description": string,
+  "Units": number,
+  "Price": number,
+  "Extended Price": number,
+  "PO": number
 }

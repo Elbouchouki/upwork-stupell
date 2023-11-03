@@ -35,12 +35,14 @@ const getHeaders = (type: string) => {
       return ["Item", "Description", "Cost", "Units", "Pcs Per Nest", "Nest", "PO", "Cancel Date"]
     case "BHC PO":
       return ["Pack", "SKU", "MFG Style", "Pack Qty", "Description", "UPC", "Cost/Unit", "Total Units", "PO", "Cancel Date", "Mark For"]
+    case "OTP PO":
+      return ["Item", "OTP Item", "Description", "Units", "Price", "Extended Price", "PO"]
     default:
       throw new Error("Invalid pdf type")
   }
 }
 
-const TYPES: [string, ...string[]] = ["Ross Stores PO", "BHC PO"]
+const TYPES: [string, ...string[]] = ["Ross Stores PO", "BHC PO", "OTP PO"]
 
 const FormSchema = z.object({
   type: z.enum(TYPES, { required_error: "Please select a file type" }),

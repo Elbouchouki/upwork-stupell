@@ -1,9 +1,11 @@
 import { bhcExtractor } from "./bhc"
+import { otpExtractor } from "./otp"
 import { rossExtractor } from "./ross"
 
 export const extractorsPerType = {
   "Ross Stores PO": rossExtractor,
-  "BHC PO": bhcExtractor
+  "BHC PO": bhcExtractor,
+  "OTP PO": otpExtractor,
 }
 
 export const extractor = async (type: string, file: File) => {
