@@ -6,10 +6,10 @@ import { cn } from '@/lib/utils'
 import { saveAs } from "file-saver";
 import * as XLSX from 'xlsx';
 import { toast } from 'sonner'
+
 type ExportToExcelButtonProps = {
   data: any[]
   fileName: string
-  header: string[]
   downloading: boolean
   setDownloading: (downloading: boolean) => void
 }

@@ -20,7 +20,6 @@ export const otpExtractor = async (file: File): Promise<OTPExtractor[]> => {
 
   pdfParser.on('pdfParser_dataReady', () => {
     const lines = (pdfParser as any).getRawTextContent().split('\n');
-    fs.writeFile("otp.txt", lines.join("\n"))
     for (let i = 0; i < lines.length; i++) {
 
       if (lines[i].trim().includes("Purchase OrderP/O Number:")) {
@@ -28,7 +27,7 @@ export const otpExtractor = async (file: File): Promise<OTPExtractor[]> => {
         while (!lines[i].trim().includes("Vendor Part No.SKU NumberUPC")) i++;
         i++
 
-        while ((lines[i].trim() as string).startsWith("otp")) {
+        while ((lines[i].trim() as string).toLocaleLowerCase().startsWith("otp")) {
           const otpRegex = /^(\S+)\s+(\S+)\s+(\S+)\s+(.+?)\s+(\S+)\s+(\S+)\s+(\S+)\s+([\d,]+\.\d+)$/;
           const match = lines[i].trim().match(otpRegex);
           if (match) {
@@ -38,6 +37,7 @@ export const otpExtractor = async (file: File): Promise<OTPExtractor[]> => {
             const price = (match[4] as string).match(/(\d+\.\d+)\s+\d+$/)?.[1];
             const units = match[6];
             const finalPrice = (match[8] as string).replace(',', '');
+            console.log(`OTP Number: ${otpNumber}, Number1: ${number1}, Description: ${description}, Price: ${price}, Units: ${units}, Final Price: ${finalPrice}`)
             ross.push({
               Item: otpNumber,
               "OTP Item": number1,

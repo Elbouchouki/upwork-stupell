@@ -33,3 +33,58 @@ export interface OTPExtractor {
   "Extended Price": number,
   "PO": number
 }
+
+export interface TaizhouExtractor {
+  "Item": string,
+  "Description": string,
+  "Units": number,
+  "Cost": number,
+  "Extended Cost": number,
+  "PO": number
+}
+
+export interface HomeGoodsExtractor {
+  "Item": string,
+  "Description": string,
+  "Units": number,
+  "Price": number,
+  "Extended Price": number,
+  "Pcs Per Nest": number,
+  "Nest": string,
+  "PO": number
+  "Cancel Date": string,
+}
+
+
+export interface YibaiSCExtractor {
+  "Item": string,
+  "Description": string,
+  "Units": number,
+  "Price": number,
+  "Extended Price": number,
+}
+
+export interface HomeSenseExtractor {
+  "Item": string,
+  "Description": string,
+  "Units": number,
+  "Price": number,
+  "Extended Price": number,
+  "Pcs Per Nest": number,
+  "Nest": string,
+  "PO": number,
+  "Cancel If Not...": string
+}
+
+
+export interface AtHomeExtractor {
+  "Item": string,
+  "Description": string,
+  "Units": number,
+  "Price": number,
+  "Extended Price": number,
+  "PO": number
+  "Cancel Date": string
+  "FOB Point": string
+}
+

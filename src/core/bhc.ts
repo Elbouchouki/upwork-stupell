@@ -47,10 +47,10 @@ export const bhcExtractor = async (file: File): Promise<BHCExtractorData[]> => {
 
   pdfParser.on('pdfParser_dataReady', () => {
     const lines = (pdfParser as any).getRawTextContent().split('\n');
-
+    fs.writeFile("bhc.txt", lines.join("\n"))
     for (let i = 0; i < lines.length; i++) {
-
-      if (lines[i].trim().includes("DEPT. NUMBER:ORDER NUMBER")) {
+      console.log("lines[i].length > 0", lines[i].length > 0)
+      if (lines[i].length > 0 && (lines[i] as string).trim().includes("DEPT. NUMBER:ORDER NUMBER")) {
         let po = (lines[i].trim() as string).slice(26)
         let j = i;
         let count = 0;
@@ -62,6 +62,7 @@ export const bhcExtractor = async (file: File): Promise<BHCExtractorData[]> => {
         j = i + 1;
 
         while (j < lines.length) {
+          console.log("line j", lines[j])
           if (lines[j].trim().includes("DEPT. NUMBER:ORDER NUMBER")) break;
           if (lines[j].trim().includes("CompRetailTotal")) count++;
           j++;

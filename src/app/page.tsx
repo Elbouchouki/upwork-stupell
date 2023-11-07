@@ -29,20 +29,15 @@ import { useForm } from "react-hook-form"
 import ExportToExcelButton from '@/components/export-to-excel';
 import { useMutation } from '@tanstack/react-query';
 
-const getHeaders = (type: string) => {
-  switch (type) {
-    case "Ross Stores PO":
-      return ["Item", "Description", "Cost", "Units", "Pcs Per Nest", "Nest", "PO", "Cancel Date"]
-    case "BHC PO":
-      return ["Pack", "SKU", "MFG Style", "Pack Qty", "Description", "UPC", "Cost/Unit", "Total Units", "PO", "Cancel Date", "Mark For"]
-    case "OTP PO":
-      return ["Item", "OTP Item", "Description", "Units", "Price", "Extended Price", "PO"]
-    default:
-      throw new Error("Invalid pdf type")
-  }
-}
-
-const TYPES: [string, ...string[]] = ["Ross Stores PO", "BHC PO", "OTP PO"]
+const TYPES: [string, ...string[]] = [
+  "Ross Stores PO",
+  "BHC PO", "OTP PO",
+  "Taizhou SC",
+  // "HomeSense aka Winners PO",
+  "AT HOME PO",
+  // "Yibai SC",
+  "HomeGoods PO",
+]
 
 const FormSchema = z.object({
   type: z.enum(TYPES, { required_error: "Please select a file type" }),
@@ -55,7 +50,6 @@ export default function Home() {
   const [canSubmit, setCanSubmit] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [generated, setGenerated] = useState(false);
-  const [header, setHeader] = useState<string[]>([])
   const [excel, setExcel] = useState({
     data: [],
     fileName: ""
@@ -74,7 +68,6 @@ export default function Home() {
       }),
       onSuccess: async (data, variables, context) => {
         const json = await data.json()
-        setHeader(getHeaders(json?.type))
         setExcel({
           data: json.data,
           fileName: `${json.type}-${new Date().getTime()}.xlsx`
@@ -99,12 +92,16 @@ export default function Home() {
     const file = fileStates[0];
 
     if (!validePdfFile(file.file.type)) {
-      updateFileProgress(file.key, "ERROR")
-      form.setError("file", {
-        type: "manuel",
-        message: "File format isn't supported, please choose a pdf file."
-      })
-      return
+      if (data.type === "AT HOME PO") {
+        console.log("file.file.type", file.file.type)
+      } else {
+        updateFileProgress(file.key, "ERROR")
+        form.setError("file", {
+          type: "manuel",
+          message: "File format isn't supported, please choose a pdf file."
+        })
+        return
+      }
     }
     setSubmitLoading(true)
     updateFileProgress(file.key, "COMPLETE")
@@ -211,7 +208,6 @@ export default function Home() {
               </Button>
               {generated ?
                 <ExportToExcelButton
-                  header={header}
                   data={excel.data}
                   fileName={excel.fileName}
                   downloading={downloading}
