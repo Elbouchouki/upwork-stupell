@@ -77,7 +77,6 @@ const ExportToExcelButton = ({ data, fileName, downloading, setDownloading }: Ex
     <Button
       type="button"
       onClick={() => {
-        console.log(data)
         exportToCSV(data, fileName)
       }}
       variant="default"

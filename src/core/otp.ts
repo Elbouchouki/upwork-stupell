@@ -37,7 +37,6 @@ export const otpExtractor = async (file: File): Promise<OTPExtractor[]> => {
             const price = (match[4] as string).match(/(\d+\.\d+)\s+\d+$/)?.[1];
             const units = match[6];
             const finalPrice = (match[8] as string).replace(',', '');
-            console.log(`OTP Number: ${otpNumber}, Number1: ${number1}, Description: ${description}, Price: ${price}, Units: ${units}, Final Price: ${finalPrice}`)
             ross.push({
               Item: otpNumber,
               "OTP Item": number1,

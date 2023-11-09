@@ -35,7 +35,7 @@ const TYPES: [string, ...string[]] = [
   "Taizhou SC",
   // "HomeSense aka Winners PO",
   "AT HOME PO",
-  // "Yibai SC",
+  "Yibai SC",
   "HomeGoods PO",
 ]
 

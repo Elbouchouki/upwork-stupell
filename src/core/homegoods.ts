@@ -34,7 +34,6 @@ export const homeGoodsExtractor = async (file: File): Promise<HomeGoodsExtractor
         const index = lines[i].trim().indexOf("PO NO:")
         if (index !== -1) {
           let po = lines[i].trim().split(" ")[2].replace("NO:", "").replace("REFERENCE", "")
-          console.log(po, cancelDate);
           // 1/2484895.80ADF1371114
           let count = 0;
           let last = 1
