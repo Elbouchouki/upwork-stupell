@@ -3,6 +3,7 @@ import { randomUUID } from 'crypto';
 import PDFParser from 'pdf2json';
 import { promises as fs } from 'fs';
 import { AtHomeExtractor } from '@/types';
+import prisma from '@/lib/prisma';
 
 export const atHomeExtractor = async (file: File): Promise<AtHomeExtractor[]> => {
 
@@ -20,9 +21,9 @@ export const atHomeExtractor = async (file: File): Promise<AtHomeExtractor[]> =>
   );
 
   const skusHashMap = new Map<string, string>();
-  const skusAndItems = (await fs.readFile("skus.txt", "utf-8")).split("\n").forEach((item) => {
-    skusHashMap.set(item.split(",")[0], item.split(",")[1])
-  });
+  (await prisma.skuItem.findMany()).forEach((item) => {
+    skusHashMap.set(item.sku, item.item)
+  })
 
   pdfParser.on('pdfParser_dataReady', () => {
     const lines = (pdfParser as any).getRawTextContent().split('\n');

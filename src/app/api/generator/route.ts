@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
 import { extractor } from '@/core/actions';
 
@@ -9,7 +9,6 @@ export async function POST(
   const formData: FormData = await req.formData();
   const type = formData.get('type') as string;
   const file: File = formData.get('file') as File;
-
 
   try {
     const data = await extractor(type, file)
@@ -22,14 +21,4 @@ export async function POST(
       status: 500
     })
   }
-
-  // extractor(type, file).then((d) => {
-
-
-  // }).catch((e: any) => {
-
-  // })
-  // const ross = await extractor(type, file)
-  // return Response.jsondata
-
 }
