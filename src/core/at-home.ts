@@ -28,7 +28,6 @@ export const atHomeExtractor = async (file: File): Promise<AtHomeExtractor[]> =>
   pdfParser.on('pdfParser_dataReady', () => {
     const lines = (pdfParser as any).getRawTextContent().split('\n');
     let pos = new Set<number>()
-    fs.writeFile("athome.txt", lines.join("\n"))
     for (let i = 0; i < lines.length; i++) {
       if (lines[i].trim().includes("PO Number")) {
         let po = (lines[i].trim() as string).replace("PO Number", "").trim()
