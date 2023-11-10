@@ -1,4 +1,4 @@
-import { randomUUID, setFips } from 'crypto';
+import { randomUUID } from 'crypto';
 import PDFParser from 'pdf2json';
 import { promises as fs } from 'fs';
 import { HomeSenseExtractor } from '@/types';
