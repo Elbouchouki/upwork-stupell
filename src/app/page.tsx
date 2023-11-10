@@ -33,7 +33,7 @@ const TYPES: [string, ...string[]] = [
   "Ross Stores PO",
   "BHC PO", "OTP PO",
   "Taizhou SC",
-  // "HomeSense aka Winners PO",
+  "HomeSense aka Winners PO",
   "AT HOME PO",
   "Yibai SC",
   "HomeGoods PO",
