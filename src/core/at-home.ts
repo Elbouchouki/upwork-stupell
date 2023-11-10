@@ -19,15 +19,15 @@ export const atHomeExtractor = async (file: File): Promise<AtHomeExtractor[]> =>
     console.log(errData.parserError)
   );
 
-  function extractSubstring(inputString: string): string | null {
-    const match = inputString.match(/[A-Z]+[0-9]+[A-Z]?[0-9]?[X0-9]+/i);
-    return match ? match[0] : null;
-  }
+  const skusHashMap = new Map<string, string>();
+  const skusAndItems = (await fs.readFile("skus.txt", "utf-8")).split("\n").forEach((item) => {
+    skusHashMap.set(item.split(",")[0], item.split(",")[1])
+  });
 
   pdfParser.on('pdfParser_dataReady', () => {
     const lines = (pdfParser as any).getRawTextContent().split('\n');
     let pos = new Set<number>()
-    // fs.writeFile("athome.txt", lines.join("\n"))
+    fs.writeFile("athome.txt", lines.join("\n"))
     for (let i = 0; i < lines.length; i++) {
       if (lines[i].trim().includes("PO Number")) {
         let po = (lines[i].trim() as string).replace("PO Number", "").trim()
@@ -36,6 +36,7 @@ export const atHomeExtractor = async (file: File): Promise<AtHomeExtractor[]> =>
         while (!lines[i].trim().includes("Do Not Ship After")) i++
         let cancelDate = lines[i].trim().replace("Do Not Ship After", "").trim()
         let fob = lines[++i].trim().replace("FOB Point", "").trim()
+        let count = 0
         while (!lines[i].trim().includes("Packaging Information")) {
           const regexPattern = /EA\d+\.\d+\.\d+\.\d+/;
           const line = lines[i].trim().replace(/,/g, '')
@@ -53,9 +54,11 @@ export const atHomeExtractor = async (file: File): Promise<AtHomeExtractor[]> =>
               units = (extendedPrice / price).toFixed(0)
             }
             const ss: string[] = splited[0].split(" ")
-            let description = ss[0].slice(10) + " " + ss.filter((item, index) => index !== 0 && index !== ss.length - 1).join(" ")
+            count++;
+            let sku = ss[0].replace(count.toString(), "").slice(0, 9)
+            let description = ss[0].replace(count.toString(), "").slice(9) + " " + ss.filter((item, index) => index !== 0 && index !== ss.length - 1).join(" ")
             const d = ss[ss.length - 1]
-            const item = d.slice(0, d.length - units.length - 13);
+            const item = skusHashMap.get(sku) || `${d.slice(0, d.length - units.length - 13)} | Sku ${sku} not found`
             ross.push({
               Item: item,
               Description: description,

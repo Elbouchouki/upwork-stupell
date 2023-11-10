@@ -23,10 +23,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import ExportToExcelButton from '@/components/export-to-excel';
+import ExportButton from '@/components/export';
 import { useMutation } from '@tanstack/react-query';
 
 const TYPES: [string, ...string[]] = [
@@ -70,7 +69,7 @@ export default function Home() {
         const json = await data.json()
         setExcel({
           data: json.data,
-          fileName: `${json.type}-${new Date().getTime()}.xlsx`
+          fileName: `${json.type}-${new Date().getTime()}`
         })
         setSubmitLoading(false)
         setGenerated(true)
@@ -146,7 +145,7 @@ export default function Home() {
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Type</FormLabel>
+                    <FormLabel>PDF Type</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -207,7 +206,7 @@ export default function Home() {
                 Reset
               </Button>
               {generated ?
-                <ExportToExcelButton
+                <ExportButton
                   data={excel.data}
                   fileName={excel.fileName}
                   downloading={downloading}
