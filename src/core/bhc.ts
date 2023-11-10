@@ -6,15 +6,16 @@ import { BHCExtractorData } from '@/types';
 function extractUnitAndCostV2(inputString: string) {
   const priceRegex = /\$\d+\.\d+/g;
   const prices = inputString.match(priceRegex);
-  let units = -1, cost = -1;
+  let units = -1, cost = -1, packQte = -1;
   if (prices && prices.length >= 3) {
     cost = Number(prices[0].slice(1))
-    let temp = inputString.replace(prices[0], "").replace(prices[1], "").replace(prices[2], "")
+    packQte = Number(prices[2].split(".")[1].charAt(2))
     units = Number(prices[2].slice(prices[2].length - 2, prices[2].length))
   }
   return {
     units,
-    cost
+    cost,
+    packQte
   }
 }
 
@@ -107,7 +108,6 @@ const bhcV1 = (lines: string[]) => {
 
 const bhcV2 = (lines: string[]) => {
   let ross: BHCExtractorData[] = [];
-
   for (let i = 0; i < lines.length; i++) {
     if (lines[i] !== undefined && (lines[i] as string).trim().includes("DEPT. NUMBER:ORDER NUMBER")) {
       let po = (lines[i].trim() as string).slice(26)
@@ -119,27 +119,26 @@ const bhcV2 = (lines: string[]) => {
       let markFor = lines[j + 2].trim()
       j = i + 1;
 
-      console.log(po, date, markFor)
-
       const regexPattern = /^\d{8}[A-Za-z0-9]{6}/;
 
       while (j < lines.length) {
         if (lines[j].trim().includes("DEPT. NUMBER:ORDER NUMBER")) break;
         const match = lines[j].trim().match(regexPattern);
         if (match) {
+          const splitted = lines[j].trim().split(" ")
           const SKU = match[0].slice(0, 8)
           const mfgStyle = match[0].slice(8)
           const pack = lines[j].trim().charAt("79003115SHB123".length)
           while (!lines[j].trim().includes("UPC")) j++;
           const upc = lines[j].trim().slice(5);
           j++;
-          const { cost, units } = extractUnitAndCostV2(lines[j].trim())
+          const { cost, units, packQte } = extractUnitAndCostV2(lines[j].trim())
           ross.push({
-            Pack: pack,
+            Pack: "NO-PACK",
             SKU,
             "MFG Style": mfgStyle,
-            "Pack Qty": -1,
-            Description: "BHC V2",
+            "Pack Qty": packQte,
+            Description: splitted[splitted.length - 1].replace("SIZE", ""),
             UPC: upc,
             "Cost/Unit": cost,
             "Total Units": units,

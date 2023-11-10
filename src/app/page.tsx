@@ -208,7 +208,7 @@ export default function Home() {
               {generated ?
                 <ExportButton
                   data={excel.data}
-                  fileName={excel.fileName}
+                  fileName={fileStates[0]?.file.name}
                   downloading={downloading}
                   setDownloading={setDownloading}
                 />
