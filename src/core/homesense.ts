@@ -59,7 +59,7 @@ export const homeSenseExtractor = async (file: File): Promise<HomeSenseExtractor
           i++;
         }
         data = data.filter((item) => item && item.length)
-        fs.writeFile(`HomeSense.txt`, data.join("\n"))
+        // fs.writeFile(`HomeSense.txt`, data.join("\n"))
         let itr = Math.ceil(data.length / 2);
         while (itr >= 0) {
           const d = [data.at(itr * 2), data.at(itr * 2 + 1)]
