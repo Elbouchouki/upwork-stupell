@@ -52,7 +52,7 @@ const ExportButton = ({ data, fileName, downloading, setDownloading }: ExportBut
       fixWidth(sheet)
       const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
       const data = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
-      saveAs(data, fileName);
+      saveAs(data, fileName.split(".")[0]);
     } catch (error: any) {
       console.error(error)
       toast.error(
