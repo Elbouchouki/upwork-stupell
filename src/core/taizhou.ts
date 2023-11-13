@@ -20,7 +20,6 @@ export const taizhouExtractor = async (file: File): Promise<TaizhouExtractor[]> 
 
   pdfParser.on('pdfParser_dataReady', () => {
     const lines = (pdfParser as any).getRawTextContent().split('\n');
-    fs.writeFile("taizhou.txt", lines.join("\n"))
     for (let i = 0; i < lines.length; i++) {
       if (lines[i].trim().includes("ITEM NO.Description")) {
         let po = (lines[--i].trim() as string).match(/PO: (\d+)/)?.[1]
