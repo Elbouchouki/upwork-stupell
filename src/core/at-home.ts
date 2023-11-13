@@ -38,14 +38,16 @@ export const atHomeExtractor = async (file: File): Promise<AtHomeExtractor[]> =>
         let fob = lines[++i].trim().replace("FOB Point", "").trim()
         let count = 0
         while (!lines[i].trim().includes("Packaging Information")) {
-          const regexPattern = /EA\d+\.\d+\.\d+\.\d+/;
-          const line = lines[i].trim().replace(/,/g, '')
+          const regexPattern = /EA\d+[.,]\d+[.,]\d+[.,]\d+/;
+          const line = lines[i].trim().replace(/,/, '')
           const match = line.trim().match(regexPattern);
           let price = 0
           let extendedPrice = 0
           let units = ""
           if (match) {
-            const splited = line.split("EA")
+            const regexPattern = /(.*)EA/;
+            const match = line.match(regexPattern);
+            const splited = [match[0], line.slice(match[0].length)]
             const regex = /\d+\.\d{2}/g;
             const matches = splited[1].match(regex);
             if (matches) {

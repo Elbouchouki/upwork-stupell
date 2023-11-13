@@ -136,7 +136,7 @@ const Settings = () => {
 
     <Dialog open={open} onOpenChange={setOpen}>
       <DropdownMenu>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>
           <Button size="icon" variant="outline">
             <SettingsIcon className="h-[1.2rem] w-[1.2rem]" />
           </Button>

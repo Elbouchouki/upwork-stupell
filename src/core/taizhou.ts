@@ -20,22 +20,22 @@ export const taizhouExtractor = async (file: File): Promise<TaizhouExtractor[]> 
 
   pdfParser.on('pdfParser_dataReady', () => {
     const lines = (pdfParser as any).getRawTextContent().split('\n');
+    fs.writeFile("taizhou.txt", lines.join("\n"))
     for (let i = 0; i < lines.length; i++) {
       if (lines[i].trim().includes("ITEM NO.Description")) {
         let po = (lines[--i].trim() as string).match(/PO: (\d+)/)?.[1]
         i++;
         i++;
-        while (lines[i].trim().match(/^[A-Za-z]{3}\d{3}/)) {
-          const match = (lines[i].trim() as string).match(/([A-Z]+\d+)([^$]+)\$(\d+\.\d+)\$(\d+,\d+\.\d+)/);
+        while (lines[i].trim().match(/^[A-Za-z]{2,4}\d{2,4}/)) {
+          const match = (lines[i].trim() as string).replace(/,/, "").match(/([A-Z]+\d+)([^$]+)\$(\d+\.\d+)\$(\d+,?\d+\.\d+)/);
           if (match) {
             const [, part1, part2, part3, part4] = match;
-            const part2Match = part2.match(/(\d+)/);
             ross.push({
               Item: part1.slice(0, 'GCR111'.length),
-              Description: part1.slice('GCR111'.length) + part2.trim(),
-              Units: Number(part2.trim().slice(part2.trim().length - 3)),
+              Description: (part1.slice('GCR111'.length) + part2.trim()).replace((Number(part4.replace(',', '')) / Number(part3)).toFixed(0), ""),
+              Units: Number((Number(part4) / Number(part3)).toFixed(0)),
               Cost: Number(part3),
-              "Extended Cost": Number(part4.replace(',', '')),
+              "Extended Cost": Number(part4),
               PO: Number(po)
             })
           }

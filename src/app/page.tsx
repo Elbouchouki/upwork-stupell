@@ -175,7 +175,7 @@ export default function Home() {
                     <FormControl>
                       <MultiFileDropzone
                         dropzoneOptions={{
-                          maxSize: 1024 * 1024 * 10,
+                          maxSize: 1024 * 1024 * 50,
                           maxFiles: 1,
                         }}
                         value={fileStates}

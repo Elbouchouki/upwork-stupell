@@ -3,13 +3,9 @@ import { Inter } from 'next/font/google'
 import { ThemeProvider } from "@/components/theme-provider"
 import './globals.css'
 import { cn } from '@/lib/utils'
-import { ModeToggle } from '@/components/toggle-theme'
 import { Toaster } from 'sonner'
 import ReactQueryProvider from '@/components/react-query-provider'
-import Settings from '@/components/settings'
-import Link from 'next/link'
 import Navbar from '@/components/navbar'
-
 
 const inter = Inter({ subsets: ['latin'] })
 
