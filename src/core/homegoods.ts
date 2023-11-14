@@ -41,7 +41,8 @@ export const homeGoodsExtractor = async (file: File): Promise<HomeGoodsExtractor
             const regex = /\d+\/\d+\.\w+/;
             const matches = lines[j].trim().match(regex);
             if (matches) {
-              const splited = lines[j].trim().replace("SIZE RATIO:  LABELS:LABEL CODE:CONTENT:TKT MSG 1:TKT MSG 2:COC DUE DATE:", "").split(" ")
+              const y = lines[j].trim().indexOf("DUE DATE:")
+              const splited = lines[j].trim().slice(y + "DUE DATE:".length).split(" ")
               const regex = /([A-Z]+)(\d+)/;
               const match = splited[splited.length - 1].match(regex);
               if (match) {
@@ -70,7 +71,7 @@ export const homeGoodsExtractor = async (file: File): Promise<HomeGoodsExtractor
                   Description: description,
                   Units: units,
                   Price: price,
-                  "Extended Price": price * units,
+                  "Extended Price": Number((price * units).toFixed(0)),
                   "Pcs Per Nest": Number(splited[splited.length - 1].charAt(splited[splited.length - 1].length - 4)),
                   Nest: splited[splited.length - 1].charAt(splited[splited.length - 1].length - 3),
                   PO: Number(po),
