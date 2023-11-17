@@ -39,12 +39,12 @@ export const otpExtractor = async (file: File): Promise<OTPExtractor[]> => {
             const finalPrice = (match[8] as string).replace(',', '');
             ross.push({
               Item: otpNumber,
-              "OTP Item": number1,
               Description: description,
               Units: Number(units),
               Price: Number(price),
               "Extended Price": Number(finalPrice),
-              PO: Number(po)
+              PO: Number(po),
+              "OTP Item": number1,
             })
           } else {
             console.log("No match found in the input.");

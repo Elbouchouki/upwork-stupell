@@ -87,15 +87,16 @@ const bhcV1 = (lines: string[]) => {
           const { cost, units } = extractUnitAndCost(lines[j].trim())
           ross.push({
             Pack: pack,
-            SKU,
-            "MFG Style": mfgStyle,
-            "Pack Qty": Number(description),
             Description: packQty,
-            UPC: upc,
-            "Cost/Unit": cost,
-            "Total Units": units,
+            "Price": cost,
+            "Units": units,
+            "Extended Price": Number((cost * units).toFixed(2)),
             PO: Number(po),
             "Cancel Date": date,
+            UPC: upc,
+            SKU,
+            "Pack Qty": Number(description),
+            "MFG Style": mfgStyle,
             "Mark For": markFor
           })
         }
@@ -135,15 +136,16 @@ const bhcV2 = (lines: string[]) => {
           const { cost, units, packQte } = extractUnitAndCostV2(lines[j].trim())
           ross.push({
             Pack: "NO-PACK",
+            Description: splitted[splitted.length - 1].replace("SIZE", ""),
+            "Price": cost,
+            "Units": units,
+            "Extended Price": Number((cost * units).toFixed(2)),
+            PO: Number(po),
+            "Cancel Date": date,
+            UPC: upc,
             SKU,
             "MFG Style": mfgStyle,
             "Pack Qty": packQte,
-            Description: splitted[splitted.length - 1].replace("SIZE", ""),
-            UPC: upc,
-            "Cost/Unit": cost,
-            "Total Units": units,
-            PO: Number(po),
-            "Cancel Date": date,
             "Mark For": markFor
           })
         }

@@ -72,10 +72,10 @@ export const homeGoodsExtractor = async (file: File): Promise<HomeGoodsExtractor
                   Units: units,
                   Price: price,
                   "Extended Price": Number((price * units).toFixed(0)),
-                  "Pcs Per Nest": Number(splited[splited.length - 1].charAt(splited[splited.length - 1].length - 4)),
-                  Nest: splited[splited.length - 1].charAt(splited[splited.length - 1].length - 3),
                   PO: Number(po),
                   "Cancel Date": cancelDate,
+                  "Pcs Per Nest": Number(splited[splited.length - 1].charAt(splited[splited.length - 1].length - 4)),
+                  Nest: splited[splited.length - 1].charAt(splited[splited.length - 1].length - 3),
                 })
               } else {
                 console.log("can't extract units");

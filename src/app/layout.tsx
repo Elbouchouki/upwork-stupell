@@ -10,8 +10,8 @@ import Navbar from '@/components/navbar'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Stupell Converter',
-  description: 'Convert PO PDFs to Excel or CSV',
+  title: 'Stupell Industries | PDF tool',
+  description: 'Stupell Industries PDF to Spreadsheet Export Custom Tool',
 }
 
 export default function RootLayout({

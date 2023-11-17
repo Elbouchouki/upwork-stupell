@@ -35,15 +35,18 @@ export const rossExtractor = async (file: File): Promise<RossExtractorData[]> =>
         }
         let r: RossExtractorData[] = new Array(count);
         for (let j = 0; j < count; j++) {
+          const cost = Number(lines[i + j + (count * 2)].trim())
+          const units = Number(lines[i + j + (count * 5)].trim())
           ross.push({
             Item: lines[i + j].trim(),
             Description: lines[i + j + (count * 1)].trim(),
             Cost: Number(lines[i + j + (count * 2)].trim()),
             Units: Number(lines[i + j + (count * 5)].trim()),
+            "Extended Cost": Number((cost * units).toFixed(2)),
+            PO: Number(po),
+            "Cancel Date": date,
             "Pcs Per Nest": Number(lines[i + j + (count * 7)].trim()),
             Nest: lines[i + j + (count * 8)].trim().split(" ")[1],
-            PO: Number(po),
-            "Cancel Date": date
           })
         }
         ross.push(...r)
