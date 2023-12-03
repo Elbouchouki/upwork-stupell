@@ -19,26 +19,32 @@ export const taizhouExtractor = async (file: File): Promise<TaizhouExtractor[]> 
   );
 
   pdfParser.on('pdfParser_dataReady', () => {
-    const lines = (pdfParser as any).getRawTextContent().split('\n');
+    let lines = (pdfParser as any).getRawTextContent()
+    lines = lines.replace("Total Price  ($US)", "\n")
+    lines = lines.split('\n');
+
     for (let i = 0; i < lines.length; i++) {
-      if (lines[i].trim().includes("ITEM NO.Description")) {
-        let po = (lines[--i].trim() as string).match(/PO: (\d+)/)?.[1]
+      if (lines[i].trim().match(/PO: (\d+)/)) {
+        let po = lines[i].trim().match(/PO: (\d+)/)?.[1]
         i++;
-        i++;
-        while (lines[i].trim().match(/^[A-Za-z]{2,4}\d{2,4}/)) {
-          const match = (lines[i].trim() as string).replace(/,/, "").match(/([A-Z]+\d+)([^$]+)\$(\d+\.\d+)\$(\d+,?\d+\.\d+)/);
+        while (!(lines[i].trim() as string).toLocaleLowerCase().startsWith("Total".toLocaleLowerCase())) {
+          const match = (lines[i].trim() as string).replace(/,/, "").match(/\b[A-Za-z\d]+\$[0-9]+\.\d{2}\$[0-9]+\.\d{2}\b/g);
           if (match) {
-            const [, part1, part2, part3, part4] = match;
+            const l = (lines[i].trim() as string).replace(/-/g, "").replace(/,/g, "")
+            const splitted = l.split(" ")
+            const regex = /\b([A-Za-z\d]+)\$([0-9]+\.\d{2})\$([0-9]+\.\d{2})\b/;
+            const match = splitted[splitted.length - 1].match(regex);
+            const [, text, cost, total, _] = match!;
             ross.push({
-              Item: part1.slice(0, 'GCR111'.length),
-              Description: (part1.slice('GCR111'.length) + part2.trim()).replace((Number(part4.replace(',', '')) / Number(part3)).toFixed(0), ""),
-              Units: Number((Number(part4) / Number(part3)).toFixed(0)),
-              Cost: Number(part3),
-              "Extended Cost": Number(part4),
+              Item: l.slice(0, 'GCR111'.length),
+              Description: splitted[0].slice('GCR111'.length) + " " + splitted.slice(1, splitted.length - 2).join(" "),
+              Units: Number((Number(total) / Number(cost)).toFixed(0)),
+              Cost: Number(cost),
+              "Extended Cost": Number(total),
               PO: Number(po)
             })
           }
-          i++;
+          i++
         }
       }
     }
